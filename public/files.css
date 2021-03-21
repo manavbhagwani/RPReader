@@ -1,0 +1,22 @@
+body{
+    font-size: 1.2em !important;
+}
+  nav{
+      background: #222222;
+      font-family: 'PT Serif', serif;
+  }
+
+  .nav-link:hover{
+      color: white !important;
+  }
+
+  .w18rem{
+      overflow:auto;
+      width:20rem;
+      height:340px;
+  }
+
+
+  .togg{
+      display: none;
+  }
