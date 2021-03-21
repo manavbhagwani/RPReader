@@ -176,8 +176,8 @@ class celsevier
                 c++;
             }
             stripper = new PDFTextStripper();
-            stripper.setStartPage(2);
-            stripper.setEndPage(2);
+            stripper.setStartPage(zzz);
+            stripper.setEndPage(zzz);
             pdfText = stripper.getText(document).toString();
             // System.out.println(pdfText);
             parsed=pdfText.split("\n");
