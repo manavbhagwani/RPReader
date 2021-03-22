@@ -211,6 +211,10 @@ class celsevier
             System.out.println(abst);
             System.out.println();
             System.out.println(keyword);
+        }catch(Exception e)
+        {
+            System.out.println("Unable to Process the given document further. Please check the template of the format which you have chosen or send us the pdf from My Profile route for review/bug fix.");
+            return;
         }
         finally
         {
