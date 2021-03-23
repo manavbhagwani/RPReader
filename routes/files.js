@@ -11,6 +11,8 @@ router.get("/",authrouter,(req,res)=>{
 
 router.post("/",authrouter,(req,res)=>
 {
+    var decode=jwt.verify(req.cookies.token,"msdhoni");
+    var user=decode.email;
     var a=req.body.text.split("\n");
     var format=a[a.length-1];
     var title="";
@@ -46,7 +48,8 @@ router.post("/",authrouter,(req,res)=>
     var files = fs.readdirSync('./uploads');
     files.sort();
     var path="/uploads/"+files[files.length-1];
-    data.find({Abstract:abstract},function(err,data1)
+    var decode=jwt.verify(req.cookies.token,"msdhoni");
+    data.find({$and:[{User:decode.email},{Abstract:abstract}]},function(err,data1)
     {
         if(err)
             res.send("Something went wrong");
@@ -55,6 +58,7 @@ router.post("/",authrouter,(req,res)=>
             if(data1.length==0)
             {
                 data.create({
+                    User:user,
                     Format:format,
                     Title:title,
                     Author:author,

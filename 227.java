@@ -60,10 +60,11 @@ class cieee
             stripper.setSortByPosition(true);
             for(int i=0;i<parsed.length;i++)
             {
-                if(!parsed[i].contains("Abstract"))
+                if(!parsed[i].replace(" " ,"").toUpperCase().contains("ABSTRACT"))
                 {
                     parsed[i]=parsed[i].replace("\r", "");
-                    parsed[i]=parsed[i].trim();
+                    if(parsed[i].trim().length()!=0)
+                        parsed[i]=parsed[i].trim();
                 }
                 else
                     break;
@@ -73,7 +74,12 @@ class cieee
             int i=0;
             if(parsed[0].contains("©"))
                 i=1;
-            int fio=parsed[i].indexOf(']');
+            int fio=parsed[i].lastIndexOf(']');
+            while(parsed[i].substring(fio+1).trim().length()==0 || parsed[i].replace(" ","").charAt(parsed[i].lastIndexOf(']')+1)<65 || parsed[i].replace(" ","").charAt(parsed[i].lastIndexOf(']')+1)>90)
+            {
+                i++;
+                fio=parsed[i].lastIndexOf(']');
+            }
             title+=parsed[i].substring(fio+1);
             i++;
             int flagx=0;
@@ -88,31 +94,41 @@ class cieee
                 else
                     break;
             }
-            System.out.println("title: "+title);
+            System.out.println("title: "+title.replace("[ivdjkvvndkvfnkdfki]",""));
             System.out.println();
             if(flagx==1)
                 i++;
-            while(!parsed[i].contains("Abstract") && !parsed[i].contains("ABSTRACT") && !parsed[i].contains("A b s t r a c t") && !parsed[i].contains("A B S T R A C T"))
+            while(!parsed[i].replace(" " ,"").toUpperCase().contains("ABSTRACT"))
             {
                 c++;
-                fio=parsed[i].indexOf(']');
+                fio=parsed[i].lastIndexOf(']');
                 authName=parsed[i].substring(fio+1);
                 i++;
-                for(int j=i;;j++)
+                for(int j=i;j<parsed.length && !parsed[i].replace(" ","").toLowerCase().contains("abstract");j++)
                 {
                     if(!(parsed[j].contains("@")))
                     {
-                        fio=parsed[j].indexOf(']');
+                        fio=parsed[j].lastIndexOf(']');
                         aff+=parsed[j].substring(fio+1)+" ";
                         i=j;
                     }
                     else
                         break;
                 }
+                if(parsed[i].replace(" ","").toLowerCase().contains("abstract"))
+                {
+                    int d=1;
+                    String authors[]=authName.replace(",","and").split("and");
+                    for(int j=0;j<authors.length;j++)
+                        if(authors[j].trim().length()!=0)
+                            System.out.println("Author "+(d++)+": "+authors[j].replace("[ivdjkvvndkvfnkdfki]","").trim());
+                    System.out.println();
+                    break;
+                }
                 i++;
-                fio=parsed[i].indexOf(']');
+                fio=parsed[i].lastIndexOf(']');
                 email=parsed[i].substring(fio+1);
-                fio=parsed[i].indexOf('@');
+                fio=parsed[i].lastIndexOf('@');
                 for(int j=fio;j>=0;j--)
                 {
                     if(email.charAt(j)!=' ')
@@ -122,9 +138,9 @@ class cieee
                 }
                 email=parsed[i].substring(fio);
                 i++;
-                System.out.println("Author "+c+": "+authName);
-                System.out.println("Affiliation "+c+": "+aff);
-                System.out.println("Email "+c+": "+email);
+                System.out.println("Author "+c+": "+authName.replace("[ivdjkvvndkvfnkdfki]",""));
+                System.out.println("Affiliation "+c+": "+aff.replace("[ivdjkvvndkvfnkdfki]",""));
+                System.out.println("Email "+c+": "+email.replace("[ivdjkvvndkvfnkdfki]",""));
                 System.out.println();
                 title="";authName="";aff="";email="";
             }
@@ -135,23 +151,24 @@ class cieee
             // System.out.println(pdfText1);
             parsed=pdfText1.split("\n");
             String abs="",key="";
-            while((!parsed[i].contains("INTRODUCTION") && !parsed[i].contains("Introduction") && !parsed[i].contains("I N T R O D U C T I O N") && !parsed[i].contains("I n t r o d u c t i o n") && !parsed[i].contains("KEYWORD") && !parsed[i].contains("Keyword") && !parsed[i].contains("K E Y W O R D") && !parsed[i].contains("K e y w o r d") && !parsed[i].contains("Index Terms") && !parsed[i].contains("INDEX TERMS") && !parsed[i].contains("Index  Terms") && !parsed[i].contains("INDEX  TERMS")) || (parsed[i].contains("Abstract") || parsed[i].contains("ABSTRACT") || parsed[i].contains("A b s t r a c t") || parsed[i].contains("A B S T R A C T")))
+            while((!parsed[i].replace(" " ,"").toUpperCase().contains("INTRODUCTION") && !parsed[i].replace(" " ,"").toUpperCase().contains("KEYWORD") && !parsed[i].replace(" " ,"").toUpperCase().contains("INDEXTERMS") && !parsed[i].replace(" " ,"").toUpperCase().contains("BACKGROUND")) || (parsed[i].replace(" " ,"").toUpperCase().contains("ABSTRACT")))
             {
                 parsed[i]=parsed[i].trim();
                 abs+=parsed[i++]+" ";
             }
-            System.out.println(abs);
+            System.out.println(abs.replace("[ivdjkvvndkvfnkdfki]",""));
             System.out.println();
-            while(!parsed[i].contains("INTRODUCTION") && !parsed[i].contains("Introduction") && !parsed[i].contains("I N T R O D U C T I O N") && !parsed[i].contains("I n t r o d u c t i o n"))
+            while(!parsed[i].replace(" " ,"").toUpperCase().contains("INTRODUCTION") && !parsed[i].replace(" " ,"").toUpperCase().contains("BACKGROUND"))
             {
                 parsed[i]=parsed[i].trim();
                 key+=parsed[i++]+" ";
             }
-            System.out.println(key);
-        }catch(Exception e)
+            System.out.println(key.replace("[ivdjkvvndkvfnkdfki]",""));
+        }
+        catch(Exception e)
         {
-            System.out.println("Unable to Process the given document further. Please check the template of the format which you have chosen or send us the pdf from My Profile route for review/bug fix.");
-            return;
+             System.out.println("Unable to Process the given document further. Please check the template of the format which you have chosen or send us the pdf from My Profile route for review/bug fix.");
+             return;
         }
         finally
         {
