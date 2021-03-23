@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 
 const userSchema = new mongoose.Schema({
+   User:String,
    Format:String,
    Title:String,
    Author:[String],
